@@ -6,6 +6,7 @@ export default component$(() => {
     <>
       <h1>Hi 👋</h1>
       <div>
+        <p>this is the index page</p>
         Can't wait to see what you build with qwik!
         <br />
         Happy coding.
