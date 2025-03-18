@@ -8,7 +8,7 @@ export const RouteAnnouncer = component$(() => {
     const doc = useDocumentHead();
 
     useOnDocument("qsymbol", $((e) => {
-
+        console.log("Event received", e.detail.symbol);
         const isSpaEvent = e.detail.symbol.includes("spaInit_event");
         if (isSpaEvent) {
             isSpa.value = true;
