@@ -12,13 +12,14 @@ export const RouteAnnouncer = component$(() => {
         const isSpaEvent = e.detail.symbol.includes("spaInit_event");
         if (isSpaEvent) {
             isSpa.value = true;
-
+            console.log("SPA initialized");
         }
 
     }))
 
     return (
         <>
+            {isSpa.value ? "true" : "false"}
             {isSpa.value && <div role='status'>The current page is {doc.title}</div>}
         </>
     );
