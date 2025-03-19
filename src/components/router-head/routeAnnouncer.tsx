@@ -58,8 +58,8 @@ export const RouteAnnouncer = component$(() => {
 					role="status"
 					aria-atomic="true"
 					style={{
-						height: "0px",
-						overflow: "hidden",
+						// height: "0px",
+						// overflow: "hidden",
 						position: "absolute",
 						top: 0,
 					}}
