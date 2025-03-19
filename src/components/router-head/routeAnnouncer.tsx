@@ -28,18 +28,16 @@ export const RouteAnnouncer = component$(() => {
 
 				if (!annoucmentElement) {
 					// set focus to the first focusable element
+					// this is when moving from MPA to SPA within the same site
 					const div = document.createElement("div");
 					div.setAttribute(
 						"style",
 						"height: 0px; overflow: hidden; position: absolute; top: 0;",
 					);
-
-					document.body.appendChild(div);
+					div.setAttribute("tabindex", "1");
+					document.body.prepend(div);
 					div.focus();
-					setTimeout(() => {
-						div.remove();
-						// remove empty div
-					}, 1);
+					div.remove();
 					return;
 				}
 
@@ -74,19 +72,6 @@ export const RouteAnnouncer = component$(() => {
 					return;
 				}
 
-				// set focus to the first focusable element
-				const div = document.createElement("div");
-				div.setAttribute(
-					"style",
-					"height: 0px; overflow: hidden; position: absolute; top: 0;",
-				);
-
-				document.body.appendChild(div);
-				div.focus();
-				setTimeout(() => {
-					div.remove();
-					// remove empty div
-				}, 1);
 				return;
 			}
 		});
