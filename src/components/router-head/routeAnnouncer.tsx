@@ -8,7 +8,7 @@ import {
 } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 
-function changeFocusToPageTop() {
+function handleSpaEvent(pageValue: string | null) {
 	const div = document.createElement("div");
 	div.setAttribute(
 		"style",
@@ -18,13 +18,22 @@ function changeFocusToPageTop() {
 	document.body.prepend(div);
 	div.focus();
 	div.remove();
+	const headTitle = document.head.querySelector("title");
+	// when navigating between SPA pages both the previous and the future page title is read out by screen readers
+
+	if (headTitle) {
+		headTitle.textContent = " ";
+		setTimeout(() => {
+			headTitle.textContent = pageValue;
+		}, 1);
+	}
 }
 
 export const RouteAnnouncer = component$(() => {
 	const isSpa = useSignal<boolean>(false);
 	const loc = useLocation();
 	const doc = useDocumentHead().title;
-	const docSignal = useSignal<string | null>(doc);
+	const docSignal = useSignal<string | null>(null);
 	useOnDocument(
 		"qsymbol",
 		$((e) => {
@@ -33,11 +42,10 @@ export const RouteAnnouncer = component$(() => {
 				e.detail.symbol.includes("s_9KRx0IOCHt8");
 			if (isSpaEvent) {
 				isSpa.value = true;
-				changeFocusToPageTop();
+				handleSpaEvent(doc);
 			}
 		}),
 	);
-
 	useTask$(({ track }) => {
 		track(() => {
 			doc;
@@ -48,11 +56,9 @@ export const RouteAnnouncer = component$(() => {
 			}
 
 			// screen readers read out the page title, but changing the title to "Home" for "/" seems a bit better experience
-			if (loc.url.pathname === "/") {
-				docSignal.value = "home";
-			}
+
 			if (isBrowser) {
-				changeFocusToPageTop();
+				handleSpaEvent(doc);
 			}
 		});
 	});
@@ -75,7 +81,7 @@ export const RouteAnnouncer = component$(() => {
 					{/* I would prefer to say "route change the current page is ${page title}" but the below is what happens on windows OS*/}
 					{/* note if no title is found the screen reader just says "document", but I have changed it slightly */}
 					{docSignal.value
-						? `${docSignal.value} has finished loading - route changed`
+						? `${docSignal.value}has finished loading`
 						: "route changed - page has finished loading"}
 				</div>
 			)}
