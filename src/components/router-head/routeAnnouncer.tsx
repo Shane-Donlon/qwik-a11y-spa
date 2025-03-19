@@ -42,12 +42,14 @@ export const RouteAnnouncer = component$(() => {
 					"[data-qwik-route-announcer]",
 				) as HTMLElement;
 
-				if (annoucmentElement) {
-					annoucmentElement.setAttribute("tabindex", "1");
-					annoucmentElement.focus();
-					annoucmentElement.removeAttribute("tabindex");
-					return;
-				}
+				setTimeout(() => {
+					if (annoucmentElement) {
+						annoucmentElement.setAttribute("tabindex", "1");
+						annoucmentElement.focus();
+						annoucmentElement.removeAttribute("tabindex");
+						return;
+					}
+				}, 0);
 			}
 		});
 	});
