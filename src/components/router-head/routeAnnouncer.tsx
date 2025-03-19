@@ -55,9 +55,10 @@ export const RouteAnnouncer = component$(() => {
 		<>
 			{isSpa.value && (
 				<div
-					role="status"
+					role="alert"
 					aria-atomic="true"
 					aria-live="assertive"
+					aria-keyshortcuts="ctrl+home"
 					style={{
 						height: "0px",
 						overflow: "hidden",
