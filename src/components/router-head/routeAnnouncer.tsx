@@ -38,13 +38,13 @@ export const RouteAnnouncer = component$(() => {
 				docSignal.value = "home";
 			}
 			if (isBrowser) {
-				const a = document.querySelector(
+				const annoucmentElement = document.querySelector(
 					"[data-qwik-route-announcer]",
 				) as HTMLElement;
-				if (a) {
-					a.setAttribute("tabindex", "1");
-					a.focus();
-					a.removeAttribute("tabindex");
+				if (annoucmentElement) {
+					annoucmentElement.setAttribute("tabindex", "1");
+					annoucmentElement.focus();
+					annoucmentElement.removeAttribute("tabindex");
 				}
 			}
 		});
@@ -52,7 +52,17 @@ export const RouteAnnouncer = component$(() => {
 	return (
 		<>
 			{isSpa.value && (
-				<div role="status" aria-atomic="true" data-qwik-route-announcer>
+				<div
+					role="status"
+					aria-atomic="true"
+					style={{
+						height: "0px",
+						overflow: "hidden",
+						position: "absolute",
+						top: 0,
+					}}
+					data-qwik-route-announcer
+				>
 					Route Change - the current page is {docSignal.value ||
 						"document"}{" "}
 				</div>
