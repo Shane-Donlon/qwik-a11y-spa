@@ -8,6 +8,18 @@ import {
 } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 
+function changeFocusToPageTop() {
+	const div = document.createElement("div");
+	div.setAttribute(
+		"style",
+		"height: 0px; overflow: hidden; position: absolute; top: 0;",
+	);
+	div.setAttribute("tabindex", "1");
+	document.body.prepend(div);
+	div.focus();
+	div.remove();
+}
+
 export const RouteAnnouncer = component$(() => {
 	const isSpa = useSignal<boolean>(false);
 	const loc = useLocation();
@@ -21,29 +33,7 @@ export const RouteAnnouncer = component$(() => {
 				e.detail.symbol.includes("s_9KRx0IOCHt8");
 			if (isSpaEvent) {
 				isSpa.value = true;
-
-				const annoucmentElement = document.querySelector(
-					"[data-qwik-route-announcer]",
-				) as HTMLElement;
-
-				if (!annoucmentElement) {
-					// set focus to the first focusable element
-					// this is when moving from MPA to SPA within the same site
-					const div = document.createElement("div");
-					div.setAttribute(
-						"style",
-						"height: 0px; overflow: hidden; position: absolute; top: 0;",
-					);
-					div.setAttribute("tabindex", "1");
-					document.body.prepend(div);
-					div.focus();
-					div.remove();
-					return;
-				}
-
-				annoucmentElement.setAttribute("tabindex", "1");
-				annoucmentElement.focus();
-				annoucmentElement.removeAttribute("tabindex");
+				changeFocusToPageTop();
 			}
 		}),
 	);
@@ -52,27 +42,17 @@ export const RouteAnnouncer = component$(() => {
 		track(() => {
 			doc;
 			loc;
+			docSignal.value = null;
 			if (doc) {
 				docSignal.value = doc;
-			} else {
-				docSignal.value = null;
 			}
+
+			// screen readers read out the page title, but changing the title to "Home" for "/" seems a bit better experience
 			if (loc.url.pathname === "/") {
 				docSignal.value = "home";
 			}
 			if (isBrowser) {
-				const annoucmentElement = document.querySelector(
-					"[data-qwik-route-announcer]",
-				) as HTMLElement;
-
-				if (annoucmentElement) {
-					annoucmentElement.setAttribute("tabindex", "1");
-					annoucmentElement.focus();
-					annoucmentElement.removeAttribute("tabindex");
-					return;
-				}
-
-				return;
+				changeFocusToPageTop();
 			}
 		});
 	});
@@ -92,8 +72,11 @@ export const RouteAnnouncer = component$(() => {
 					}}
 					data-qwik-route-announcer
 				>
-					Route Change - the current page is {docSignal.value ||
-						"document"}{" "}
+					{/* I would prefer to say "route change the current page is ${page title}" but the below is what happens on windows OS*/}
+					{/* note if no title is found the screen reader just says "document", but I have changed it slightly */}
+					{docSignal.value
+						? `${docSignal.value} has finished loading`
+						: "route changed - page has finished loading"}
 				</div>
 			)}
 		</>
