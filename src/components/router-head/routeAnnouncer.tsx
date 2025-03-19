@@ -63,8 +63,6 @@ export const RouteAnnouncer = component$(() => {
 				docSignal.value = "home";
 			}
 			if (isBrowser) {
-				console.log("docSignal isBrowser", docSignal.value);
-				console.log("isBrowser", isBrowser);
 				const annoucmentElement = document.querySelector(
 					"[data-qwik-route-announcer]",
 				) as HTMLElement;
@@ -75,6 +73,21 @@ export const RouteAnnouncer = component$(() => {
 					annoucmentElement.removeAttribute("tabindex");
 					return;
 				}
+
+				// set focus to the first focusable element
+				const div = document.createElement("div");
+				div.setAttribute(
+					"style",
+					"height: 0px; overflow: hidden; position: absolute; top: 0;",
+				);
+
+				document.body.appendChild(div);
+				div.focus();
+				setTimeout(() => {
+					div.remove();
+					// remove empty div
+				}, 1);
+				return;
 			}
 		});
 	});
