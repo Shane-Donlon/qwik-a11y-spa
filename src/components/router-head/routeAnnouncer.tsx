@@ -23,9 +23,7 @@ function handleSpaEvent(pageValue: string | null) {
 
 	if (headTitle) {
 		headTitle.textContent = " ";
-		setTimeout(() => {
-			headTitle.textContent = pageValue;
-		}, 1);
+		headTitle.textContent = pageValue;
 	}
 }
 
@@ -81,7 +79,7 @@ export const RouteAnnouncer = component$(() => {
 					{/* I would prefer to say "route change the current page is ${page title}" but the below is what happens on windows OS*/}
 					{/* note if no title is found the screen reader just says "document", but I have changed it slightly */}
 					{docSignal.value
-						? `${docSignal.value}has finished loading`
+						? `${docSignal.value} has finished loading`
 						: "route changed - page has finished loading"}
 				</div>
 			)}
