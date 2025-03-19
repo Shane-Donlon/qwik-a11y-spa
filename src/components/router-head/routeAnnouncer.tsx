@@ -21,6 +21,31 @@ export const RouteAnnouncer = component$(() => {
 				e.detail.symbol.includes("s_9KRx0IOCHt8");
 			if (isSpaEvent) {
 				isSpa.value = true;
+
+				const annoucmentElement = document.querySelector(
+					"[data-qwik-route-announcer]",
+				) as HTMLElement;
+
+				if (!annoucmentElement) {
+					// set focus to the first focusable element
+					const div = document.createElement("div");
+					div.setAttribute(
+						"style",
+						"height: 0px; overflow: hidden; position: absolute; top: 0;",
+					);
+
+					document.body.appendChild(div);
+					div.focus();
+					setTimeout(() => {
+						div.remove();
+						// remove empty div
+					}, 1);
+					return;
+				}
+
+				annoucmentElement.setAttribute("tabindex", "1");
+				annoucmentElement.focus();
+				annoucmentElement.removeAttribute("tabindex");
 			}
 		}),
 	);
@@ -38,18 +63,18 @@ export const RouteAnnouncer = component$(() => {
 				docSignal.value = "home";
 			}
 			if (isBrowser) {
+				console.log("docSignal isBrowser", docSignal.value);
+				console.log("isBrowser", isBrowser);
 				const annoucmentElement = document.querySelector(
 					"[data-qwik-route-announcer]",
 				) as HTMLElement;
 
-				setTimeout(() => {
-					if (annoucmentElement) {
-						annoucmentElement.setAttribute("tabindex", "1");
-						annoucmentElement.focus();
-						annoucmentElement.removeAttribute("tabindex");
-						return;
-					}
-				}, 0);
+				if (annoucmentElement) {
+					annoucmentElement.setAttribute("tabindex", "1");
+					annoucmentElement.focus();
+					annoucmentElement.removeAttribute("tabindex");
+					return;
+				}
 			}
 		});
 	});
